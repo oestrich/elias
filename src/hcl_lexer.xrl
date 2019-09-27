@@ -1,19 +1,20 @@
 Definitions.
 
-ArrayOpen = \[
 ArrayClose = \]
+ArrayOpen = \[
 BackSlash = \\
-BracketOpen = {
 BracketClose = }
+BracketOpen = {
 Colon = :
 Comma = ,
 Dash = -
+Digit = [0-9]+
+DoubleQuote = "
 Equals = =
 NewLine = (\n|\n\r|\r)
 SingleQuote = '
-DoubleQuote = "
 Space = \s+
-Word = [^{}\n\[\]=\s'":\\-]+
+Word = [^0-9{}\n\[\]=\s'":\\-]+
 
 Rules.
 
@@ -23,10 +24,11 @@ Rules.
 {BracketClose} : {token, {bracket_close, TokenLine, TokenChars}}.
 {BracketOpen} : {token, {bracket_open, TokenLine, TokenChars}}.
 {Comma} : {token, {comma, TokenLine, TokenChars}}.
+{Digit} : {token, {digit, TokenLine, TokenChars}}.
+{DoubleQuote} : {token, {double_quote, TokenLine, TokenChars}}.
 {Equals} : {token, {equals, TokenLine, TokenChars}}.
 {NewLine} : {token, {newline, TokenLine, TokenChars}}.
 {SingleQuote} : {token, {single_quote, TokenLine, TokenChars}}.
-{DoubleQuote} : {token, {double_quote, TokenLine, TokenChars}}.
 {Space} : {token, {space, TokenLine, TokenChars}}.
 {Word} : {token, {word, TokenLine, TokenChars}}.
 

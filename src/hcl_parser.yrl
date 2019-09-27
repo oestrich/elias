@@ -25,8 +25,9 @@ back_slash
 bracket_close
 bracket_open
 comma
-equals
+digit
 double_quote
+equals
 newline
 single_quote
 space
@@ -53,6 +54,7 @@ assignments -> newline assignments : '$2'.
 assignments -> '$empty' : [].
 
 assignment -> word space equals space string : {assignment, val('$1'), '$5'}.
+assignment -> word space equals space digit : {assignment, val('$1'), integer('$5')}.
 assignment -> word space equals space array : {assignment, val('$1'), '$5'}.
 assignment -> word space equals space block : {assignment, val('$1'), '$5'}.
 
@@ -97,4 +99,9 @@ Expect 3.
 
 Erlang code.
 
-val({_, _, V}) -> V.
+integer(V) ->
+  Digits = val(V),
+  {integer, erlang:list_to_integer(Digits)}.
+
+val({_, _, V}) ->
+  V.
