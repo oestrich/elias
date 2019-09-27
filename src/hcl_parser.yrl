@@ -15,7 +15,6 @@ objects
 quotes
 resource
 string
-whitespace
 words
 .
 
@@ -39,6 +38,7 @@ Rootsymbol objects.
 array -> array_start array_end : {array, []}.
 array -> array_start array_inner array_end : {array, '$2'}.
 
+array_end -> space array_close : ']'.
 array_end -> array_close : ']'.
 
 array_inner -> block comma array_inner : ['$1' | '$3'].
@@ -73,6 +73,7 @@ keys -> string keys : ['$1' | '$2'].
 keys -> '$empty' : [].
 
 objects -> object objects : ['$1' | '$2'].
+objects -> empty_line objects : '$2'.
 objects -> '$empty' : [].
 
 object -> resource keys block : {object, ['$1' | '$2'], '$3'}.
@@ -84,21 +85,13 @@ resource -> word space : {string, [val('$1')]}.
 
 string -> double_quote words double_quote : {string, '$2'}.
 
-whitespace -> newline whitespace: ['$1' | '$2'].
-whitespace -> space whitespace : ['$1' | '$2'].
-whitespace -> '$empty' : [].
-
 words -> word words : [val('$1') | '$2'].
 words -> back_slash quotes words : [val('$1'), '$2' | '$3'].
 words -> single_quote words : [val('$1') | '$2'].
 words -> bracket_close words : [val('$1') | '$2'].
 words -> bracket_open words : [val('$1') | '$2'].
 words -> space words : [val('$1') | '$2'].
-
-words -> back_slash quotes : [val('$1'), '$2'].
-words -> single_quote : [val('$1')].
-words -> bracket_close : [val('$1')].
-words -> word : [val('$1')].
+words -> '$empty' : [].
 
 Expect 3.
 
