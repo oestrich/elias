@@ -11,6 +11,7 @@ block_start
 keys
 object
 objects
+quotes
 resource
 string
 whitespace
@@ -25,8 +26,9 @@ bracket_close
 bracket_open
 comma
 equals
+double_quote
 newline
-quote
+single_quote
 space
 word
 .
@@ -76,10 +78,13 @@ objects -> object : ['$1'].
 object -> resource keys block : {object, ['$1' | '$2'], '$3'}.
 object -> resource keys block newline : {object, ['$1' | '$2'], '$3'}.
 
+quotes -> double_quote : val('$1').
+quotes -> single_quote : val('$1').
+
 resource -> word space : {string, [val('$1')]}.
 
-string -> quote words quote space : {string, '$2'}.
-string -> quote words quote : {string, '$2'}.
+string -> double_quote words double_quote space : {string, '$2'}.
+string -> double_quote words double_quote : {string, '$2'}.
 
 whitespace -> newline whitespace: ['$1' | '$2'].
 whitespace -> space whitespace : ['$1' | '$2'].
@@ -87,12 +92,14 @@ whitespace -> newline : ['$1'].
 whitespace -> space : ['$1'].
 
 words -> word words : [val('$1') | '$2'].
-words -> back_slash quote words : [val('$1'), val('$2') | '$2'].
+words -> back_slash quotes words : [val('$1'), '$2' | '$3'].
+words -> single_quote words : [val('$1') | '$2'].
 words -> bracket_close words : [val('$1') | '$2'].
 words -> bracket_open words : [val('$1') | '$2'].
 words -> newline words : [val('$1') | '$2'].
 words -> space words : [val('$1') | '$2'].
-words -> back_slash quote : [val('$1'), val('$2')].
+words -> back_slash quotes : [val('$1'), '$2'].
+words -> single_quote : [val('$1')].
 words -> bracket_close : [val('$1')].
 words -> word : [val('$1')].
 

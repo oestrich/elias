@@ -10,7 +10,8 @@ Comma = ,
 Dash = -
 Equals = =
 NewLine = (\n|\n\r|\r)
-Quote = ['"]
+SingleQuote = '
+DoubleQuote = "
 Space = \s+
 Word = [^{}\n\[\]=\s'":\\-]+
 
@@ -24,8 +25,8 @@ Rules.
 {Comma} : {token, {comma, TokenLine, TokenChars}}.
 {Equals} : {token, {equals, TokenLine, TokenChars}}.
 {NewLine} : {token, {newline, TokenLine, TokenChars}}.
-{Quote} : {token, {quote, TokenLine, TokenChars}}.
-{Quote} : {token, {quote, TokenLine, TokenChars}}.
+{SingleQuote} : {token, {single_quote, TokenLine, TokenChars}}.
+{DoubleQuote} : {token, {double_quote, TokenLine, TokenChars}}.
 {Space} : {token, {space, TokenLine, TokenChars}}.
 {Word} : {token, {word, TokenLine, TokenChars}}.
 
