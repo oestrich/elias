@@ -12,7 +12,10 @@ defmodule HCL.ParserTest do
 
     {:ok, ast} = Parser.parse(string)
 
-    IO.inspect ast
+    assert ast == [
+             {:object, [string: ['rooms'], string: ['town_square']],
+              {:block, [{:assignment, 'name', {:string, ['Town', '\'', 's', ' ', 'Square']}}]}}
+           ]
   end
 
   test "simple object with multiple values" do
@@ -25,7 +28,14 @@ defmodule HCL.ParserTest do
 
     {:ok, ast} = Parser.parse(string)
 
-    IO.inspect ast
+    assert ast == [
+             {:object, [string: ['rooms'], string: ['town_square']],
+              {:block,
+               [
+                 {:assignment, 'name', {:string, ['Town', '\'', 's', ' ', 'Square']}},
+                 {:assignment, 'description', {:string, ['A', ' ', 'town', ' ', 'square']}}
+               ]}}
+           ]
   end
 
   test "mutliple simple objects" do
@@ -41,7 +51,12 @@ defmodule HCL.ParserTest do
 
     {:ok, ast} = Parser.parse(string)
 
-    IO.inspect ast
+    assert ast == [
+             {:object, [string: ['rooms'], string: ['town_square']],
+              {:block, [{:assignment, 'name', {:string, ['Town', '\'', 's', ' ', 'Square']}}]}},
+             {:object, [string: ['rooms'], string: ['marketplace']],
+              {:block, [{:assignment, 'name', {:string, ['Marketplace']}}]}}
+           ]
   end
 
   test "simple object with empty line" do
@@ -55,7 +70,14 @@ defmodule HCL.ParserTest do
 
     {:ok, ast} = Parser.parse(string)
 
-    IO.inspect ast
+    assert ast == [
+             {:object, [string: ['rooms'], string: ['town_square']],
+              {:block,
+               [
+                 {:assignment, 'name', {:string, ['Town', '\'', 's', ' ', 'Square']}},
+                 {:assignment, 'description', {:string, ['A', ' ', 'town', ' ', 'square']}}
+               ]}}
+           ]
   end
 
   describe "arrays" do
@@ -72,7 +94,14 @@ defmodule HCL.ParserTest do
 
       {:ok, ast} = Parser.parse(string)
 
-      IO.inspect ast
+      assert ast == [
+               {:object, [string: ['rooms'], string: ['town_square']],
+                {:block,
+                 [
+                   {:assignment, 'features',
+                    {:array, [block: [{:assignment, 'name', {:string, ['sign']}}]]}}
+                 ]}}
+             ]
     end
 
     test "multiple elements" do
@@ -91,7 +120,18 @@ defmodule HCL.ParserTest do
 
       {:ok, ast} = Parser.parse(string)
 
-      IO.inspect ast
+      assert ast == [
+               {:object, [string: ['rooms'], string: ['town_square']],
+                {:block,
+                 [
+                   {:assignment, 'features',
+                    {:array,
+                     [
+                       block: [{:assignment, 'name', {:string, ['sign']}}],
+                       block: [{:assignment, 'name', {:string, ['well']}}]
+                     ]}}
+                 ]}}
+             ]
     end
   end
 end
