@@ -10,6 +10,22 @@ defmodule HCL.Value do
   defstruct [:key, :value]
 end
 
+defmodule HCL.Parser do
+  def parse(string) do
+    case :hcl_lexer.string(String.to_charlist(string)) do
+      {:ok, tokens, _} ->
+        parse_tokens(tokens)
+    end
+  end
+
+  def parse_tokens(tokens) do
+    case :hcl_parser.parse(tokens) do
+      {:ok, tokens} ->
+        {:ok, tokens}
+    end
+  end
+end
+
 defmodule HCL do
   def parse(string) do
     case :hcl_lexer.string(String.to_charlist(string)) do
