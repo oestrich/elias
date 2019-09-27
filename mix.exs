@@ -1,4 +1,4 @@
-defmodule Hcl.MixProject do
+defmodule HCL.MixProject do
   use Mix.Project
 
   def project do
