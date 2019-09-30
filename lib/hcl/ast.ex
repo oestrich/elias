@@ -14,10 +14,10 @@ defmodule HCL.AST do
     [parse_node(node) | walk_ast(nodes)]
   end
 
-  def parse_node({:object, key, object}) do
-    %HCL.Object{
+  def parse_node({:section, key, section}) do
+    %HCL.Section{
       key: walk_key(key),
-      block: parse_node(object)
+      block: parse_node(section)
     }
   end
 

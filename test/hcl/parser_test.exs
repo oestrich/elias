@@ -4,7 +4,7 @@ defmodule HCL.ParserTest do
   alias HCL.Parser
 
   describe "the basics" do
-    test "simple object" do
+    test "simple section" do
       string = """
       rooms "town_square" {
         name = "Town's Square"
@@ -14,12 +14,12 @@ defmodule HCL.ParserTest do
       {:ok, ast} = Parser.parse(string)
 
       assert ast == [
-               {:object, [string: ['rooms'], string: ['town_square']],
+               {:section, [string: ['rooms'], string: ['town_square']],
                 {:block, [{:assignment, 'name', {:string, ['Town', '\'', 's', ' ', 'Square']}}]}}
              ]
     end
 
-    test "simple object with multiple values" do
+    test "simple section with multiple values" do
       string = """
       rooms "town_square" {
         name = "Town's Square"
@@ -30,7 +30,7 @@ defmodule HCL.ParserTest do
       {:ok, ast} = Parser.parse(string)
 
       assert ast == [
-               {:object, [string: ['rooms'], string: ['town_square']],
+               {:section, [string: ['rooms'], string: ['town_square']],
                 {:block,
                  [
                    {:assignment, 'name', {:string, ['Town', '\'', 's', ' ', 'Square']}},
@@ -39,7 +39,7 @@ defmodule HCL.ParserTest do
              ]
     end
 
-    test "mutliple simple objects" do
+    test "mutliple simple sections" do
       string = """
       rooms "town_square" {
         name = "Town's Square"
@@ -53,14 +53,14 @@ defmodule HCL.ParserTest do
       {:ok, ast} = Parser.parse(string)
 
       assert ast == [
-               {:object, [string: ['rooms'], string: ['town_square']],
+               {:section, [string: ['rooms'], string: ['town_square']],
                 {:block, [{:assignment, 'name', {:string, ['Town', '\'', 's', ' ', 'Square']}}]}},
-               {:object, [string: ['rooms'], string: ['marketplace']],
+               {:section, [string: ['rooms'], string: ['marketplace']],
                 {:block, [{:assignment, 'name', {:string, ['Marketplace']}}]}}
              ]
     end
 
-    test "simple object with empty line" do
+    test "simple section with empty line" do
       string = """
       rooms "town_square" {
         name = "Town's Square"
@@ -72,12 +72,27 @@ defmodule HCL.ParserTest do
       {:ok, ast} = Parser.parse(string)
 
       assert ast == [
-               {:object, [string: ['rooms'], string: ['town_square']],
+               {:section, [string: ['rooms'], string: ['town_square']],
                 {:block,
                  [
                    {:assignment, 'name', {:string, ['Town', '\'', 's', ' ', 'Square']}},
                    {:assignment, 'description', {:string, ['A', ' ', 'town', ' ', 'square']}}
                  ]}}
+             ]
+    end
+
+    test "allows semi colons" do
+      string = """
+      rooms "town_square" {
+        name = "Town's Square";
+      }
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {:section, [string: ['rooms'], string: ['town_square']],
+                {:block, [{:assignment, 'name', {:string, ['Town', '\'', 's', ' ', 'Square']}}]}}
              ]
     end
   end
@@ -93,13 +108,40 @@ defmodule HCL.ParserTest do
       {:ok, ast} = Parser.parse(string)
 
       assert ast == [
-               {:object, [string: ['rooms'], string: ['town_square']],
+               {:section, [string: ['rooms'], string: ['town_square']],
                 {:block, [{:assignment, 'id', {:integer, 10}}]}}
              ]
     end
   end
 
   describe "arrays" do
+    test "auto creates arrays" do
+      string = """
+      rooms "town_square" {
+        feature {
+          name = "sign"
+        }
+
+        feature {
+          name = "sign"
+        }
+      }
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {:section, [string: ['rooms'], string: ['town_square']],
+                {:block,
+                 [
+                   {:section, [string: ['feature']],
+                    {:block, [{:assignment, 'name', {:string, ['sign']}}]}},
+                   {:section, [string: ['feature']],
+                    {:block, [{:assignment, 'name', {:string, ['sign']}}]}}
+                 ]}}
+             ]
+    end
+
     test "array with one element" do
       string = """
       rooms "town_square" {
@@ -114,7 +156,7 @@ defmodule HCL.ParserTest do
       {:ok, ast} = Parser.parse(string)
 
       assert ast == [
-               {:object, [string: ['rooms'], string: ['town_square']],
+               {:section, [string: ['rooms'], string: ['town_square']],
                 {:block,
                  [
                    {:assignment, 'features',
@@ -140,7 +182,7 @@ defmodule HCL.ParserTest do
       {:ok, ast} = Parser.parse(string)
 
       assert ast == [
-               {:object, [string: ['rooms'], string: ['town_square']],
+               {:section, [string: ['rooms'], string: ['town_square']],
                 {:block,
                  [
                    {:assignment, 'features',

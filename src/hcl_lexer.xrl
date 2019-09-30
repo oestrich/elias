@@ -12,9 +12,10 @@ Digit = [0-9]+
 DoubleQuote = "
 Equals = =
 NewLine = (\n|\n\r|\r)
+SemiColon = \;
 SingleQuote = '
 Space = \s+
-Word = [^0-9{}\n\[\]=\s'":\\-]+
+Word = [^0-9{}\n\[\]=\s'":\;\\-]+
 
 Rules.
 
@@ -24,10 +25,12 @@ Rules.
 {BracketClose} : {token, {bracket_close, TokenLine, TokenChars}}.
 {BracketOpen} : {token, {bracket_open, TokenLine, TokenChars}}.
 {Comma} : {token, {comma, TokenLine, TokenChars}}.
+{Colon} : {token, {colon, TokenLine, TokenChars}}.
 {Digit} : {token, {digit, TokenLine, TokenChars}}.
 {DoubleQuote} : {token, {double_quote, TokenLine, TokenChars}}.
 {Equals} : {token, {equals, TokenLine, TokenChars}}.
 {NewLine} : {token, {newline, TokenLine, TokenChars}}.
+{SemiColon} : {token, {semi_colon, TokenLine, TokenChars}}.
 {SingleQuote} : {token, {single_quote, TokenLine, TokenChars}}.
 {Space} : {token, {space, TokenLine, TokenChars}}.
 {Word} : {token, {word, TokenLine, TokenChars}}.

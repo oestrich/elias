@@ -3,13 +3,38 @@ defmodule HCL.Merge do
   Merge an AST into a map
   """
 
+  alias HCL.Section
+  alias HCL.Value
+
   @doc """
-  Merge a set of objects into a single map
+  Merge a set of sections into a single map
   """
-  def collapse(objects) do
-    Enum.reduce(objects, %{}, fn object, map ->
-      merge_object(object.key, object.block, map)
-    end)
+  def collapse(assigments) do
+    Enum.reduce(assigments, %{}, &reduce_assignment/2)
+  end
+
+  def append_value(map, key, value) do
+    case Map.has_key?(map, key) do
+      true ->
+        existing = List.wrap(map[key])
+        existing = Enum.reverse(existing)
+        Map.put(map, key, Enum.reverse([value | existing]))
+
+      false ->
+        Map.put(map, key, value)
+    end
+  end
+
+  def reduce_assignment(value = %Value{}, map) do
+    append_value(map, value.key, value.value)
+  end
+
+  def reduce_assignment(section = %Section{}, map) do
+    merge_section(section.key, section.block, map)
+  end
+
+  def reduce_value(section = %Section{}, map) do
+    merge_section(section.key, section.block, map)
   end
 
   def reduce_value(%{key: key, value: values}, map) when is_list(values) do
@@ -17,25 +42,25 @@ defmodule HCL.Merge do
   end
 
   def reduce_value(%{key: key, value: value}, map) do
-    Map.put(map, key, value)
+    append_value(map, key, value)
   end
 
   def reduce_array(values) do
     Enum.map(values, fn block ->
       Enum.reduce(block, %{}, fn value, map ->
-        Map.put(map, value.key, value.value)
+        append_value(map, value.key, value.value)
       end)
     end)
   end
 
-  def merge_object([key], value, map) do
+  def merge_section([key], value, map) do
     data = Enum.reduce(value, %{}, &reduce_value/2)
-    Map.put(map, key, data)
+    append_value(map, key, data)
   end
 
-  def merge_object([key | keys], value, map) do
+  def merge_section([key | keys], value, map) do
     sub_map = Map.get(map, key, %{})
-    sub_map = merge_object(keys, value, sub_map)
+    sub_map = merge_section(keys, value, sub_map)
     Map.put(map, key, sub_map)
   end
 end

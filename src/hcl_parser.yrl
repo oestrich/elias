@@ -8,12 +8,10 @@ assignments
 block
 block_end
 block_start
-empty_line
 keys
-object
-objects
 quotes
-resource
+section
+section_name
 string
 words
 .
@@ -29,12 +27,13 @@ digit
 double_quote
 equals
 newline
+semi_colon
 single_quote
 space
 word
 .
 
-Rootsymbol objects.
+Rootsymbol assignments.
 
 array -> array_start array_end : {array, []}.
 array -> array_start array_inner array_end : {array, '$2'}.
@@ -49,14 +48,16 @@ array_inner -> block : ['$1'].
 array_start -> array_open : '['.
 
 assignments -> assignment assignments : ['$1' | '$2'].
+assignments -> assignment semi_colon assignments : ['$1' | '$3'].
+assignments -> section assignments : ['$1' | '$2'].
 assignments -> space assignments : '$2'.
 assignments -> newline assignments : '$2'.
 assignments -> '$empty' : [].
 
-assignment -> word space equals space string : {assignment, val('$1'), '$5'}.
-assignment -> word space equals space digit : {assignment, val('$1'), integer('$5')}.
 assignment -> word space equals space array : {assignment, val('$1'), '$5'}.
 assignment -> word space equals space block : {assignment, val('$1'), '$5'}.
+assignment -> word space equals space digit : {assignment, val('$1'), integer('$5')}.
+assignment -> word space equals space string : {assignment, val('$1'), '$5'}.
 
 block -> block_start block_end : {block, []}.
 block -> space block_start assignments block_end : {block, '$3'}.
@@ -68,22 +69,15 @@ block_end -> bracket_close : '}'.
 block_start -> bracket_open newline : '{'.
 block_start -> bracket_open : '{'.
 
-empty_line -> space newline : nil.
-empty_line -> newline : nil.
-
 keys -> string keys : ['$1' | '$2'].
 keys -> '$empty' : [].
-
-objects -> object objects : ['$1' | '$2'].
-objects -> empty_line objects : '$2'.
-objects -> '$empty' : [].
-
-object -> resource keys block : {object, ['$1' | '$2'], '$3'}.
 
 quotes -> double_quote : val('$1').
 quotes -> single_quote : val('$1').
 
-resource -> word space : {string, [val('$1')]}.
+section -> section_name keys block : {section, ['$1' | '$2'], '$3'}.
+
+section_name -> word space : {string, [val('$1')]}.
 
 string -> double_quote words double_quote : {string, '$2'}.
 

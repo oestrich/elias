@@ -1,4 +1,4 @@
-defmodule HCL.Object do
+defmodule HCL.Section do
   defstruct [:key, :block]
 end
 
