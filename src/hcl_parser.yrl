@@ -8,8 +8,10 @@ assignments
 block
 block_end
 block_start
+equality
 keys
 quotes
+root
 section
 section_name
 string
@@ -22,6 +24,7 @@ array_open
 back_slash
 bracket_close
 bracket_open
+colon
 comma
 digit
 double_quote
@@ -33,7 +36,10 @@ space
 word
 .
 
-Rootsymbol assignments.
+Rootsymbol root.
+
+root -> block_start assignments block_end : '$2'.
+root -> assignments : '$1'.
 
 array -> array_start array_end : {array, []}.
 array -> array_start array_inner array_end : {array, '$2'}.
@@ -42,6 +48,7 @@ array_end -> space array_close : ']'.
 array_end -> array_close : ']'.
 
 array_inner -> block comma array_inner : ['$1' | '$3'].
+array_inner -> space array_inner : '$2'.
 array_inner -> newline array_inner : '$2'.
 array_inner -> block : ['$1'].
 
@@ -54,13 +61,12 @@ assignments -> space assignments : '$2'.
 assignments -> newline assignments : '$2'.
 assignments -> '$empty' : [].
 
-assignment -> word space equals space array : {assignment, val('$1'), '$5'}.
-assignment -> word space equals space block : {assignment, val('$1'), '$5'}.
-assignment -> word space equals space digit : {assignment, val('$1'), integer('$5')}.
-assignment -> word space equals space string : {assignment, val('$1'), '$5'}.
+assignment -> word equality array : {assignment, val('$1'), '$3'}.
+assignment -> word equality block : {section, [{string, val('$1')}], '$3'}.
+assignment -> word equality digit : {assignment, val('$1'), integer('$3')}.
+assignment -> word equality string : {assignment, val('$1'), '$3'}.
 
 block -> block_start block_end : {block, []}.
-block -> space block_start assignments block_end : {block, '$3'}.
 block -> block_start assignments block_end : {block, '$2'}.
 
 block_end -> bracket_close newline : '}'.
@@ -69,6 +75,15 @@ block_end -> bracket_close : '}'.
 block_start -> bracket_open newline : '{'.
 block_start -> bracket_open : '{'.
 
+equality -> space equals space : '='.
+equality -> equals space : '='.
+equality -> space equals : '='.
+equality -> equals : '='.
+equality -> space colon space : '='.
+equality -> colon space : '='.
+equality -> space colon : '='.
+equality -> colon : '='.
+
 keys -> string keys : ['$1' | '$2'].
 keys -> '$empty' : [].
 
@@ -76,6 +91,7 @@ quotes -> double_quote : val('$1').
 quotes -> single_quote : val('$1').
 
 section -> section_name keys block : {section, ['$1' | '$2'], '$3'}.
+section -> section_name keys space block : {section, ['$1' | '$2'], '$4'}.
 
 section_name -> word space : {string, [val('$1')]}.
 

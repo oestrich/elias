@@ -34,6 +34,8 @@ defmodule HCL.AST do
 
   def parse_value({:array, expressions}), do: walk_ast(expressions)
 
+  def parse_value({:block, expressions}), do: parse_node({:block, expressions})
+
   def parse_value({:integer, integer}), do: integer
 
   def parse_value({:string, strings}) do

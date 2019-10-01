@@ -95,6 +95,83 @@ defmodule HCL.ParserTest do
                 {:block, [{:assignment, 'name', {:string, ['Town', '\'', 's', ' ', 'Square']}}]}}
              ]
     end
+
+    test "use equals with blocks" do
+      string = """
+      rooms "town_square" {
+        features = {
+          key = "sign"
+        }
+      }
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {:section, [string: ['rooms'], string: ['town_square']],
+                {:block,
+                 [
+                   {:section, [string: 'features'],
+                    {:block, [{:assignment, 'key', {:string, ['sign']}}]}}
+                 ]}}
+             ]
+    end
+
+    test "sections and assignments" do
+      string = """
+      rooms "town_square" {
+        features = {
+          key : "sign"
+        }
+        features= {
+          key: "sign"
+        }
+        features ={
+          key :"sign"
+        }
+        features={
+          key:"sign"
+        }
+      }
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {:section, [string: ['rooms'], string: ['town_square']],
+                {:block,
+                 [
+                   {:section, [string: 'features'],
+                    {:block, [{:assignment, 'key', {:string, ['sign']}}]}},
+                   {:section, [string: 'features'],
+                    {:block, [{:assignment, 'key', {:string, ['sign']}}]}},
+                   {:section, [string: 'features'],
+                    {:block, [{:assignment, 'key', {:string, ['sign']}}]}},
+                   {:section, [string: 'features'],
+                    {:block, [{:assignment, 'key', {:string, ['sign']}}]}}
+                 ]}}
+             ]
+    end
+
+    test "including a root object" do
+      string = """
+      {
+        rooms "town_square" {
+          name = "Town Square"
+        }
+      }
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {:section, [string: ['rooms'], string: ['town_square']],
+                {:block,
+                 [
+                   {:assignment, 'name', {:string, ['Town', ' ', 'Square']}}
+                 ]}}
+             ]
+    end
   end
 
   describe "integers" do

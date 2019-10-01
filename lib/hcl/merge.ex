@@ -38,7 +38,7 @@ defmodule HCL.Merge do
   end
 
   def reduce_value(%{key: key, value: values}, map) when is_list(values) do
-    Map.put(map, key, reduce_array(values))
+    append_value(map, key, reduce_array(values))
   end
 
   def reduce_value(%{key: key, value: value}, map) do
