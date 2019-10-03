@@ -1,4 +1,4 @@
-defmodule HCL.AST do
+defmodule UCL.AST do
   @moduledoc """
   Process a raw AST into nodes
   """
@@ -15,7 +15,7 @@ defmodule HCL.AST do
   end
 
   def parse_node({:section, key, section}) do
-    %HCL.Section{
+    %UCL.Section{
       key: walk_key(key),
       block: parse_node(section)
     }
@@ -26,7 +26,7 @@ defmodule HCL.AST do
   end
 
   def parse_node({:assignment, key, value}) do
-    %HCL.Value{
+    %UCL.Value{
       key: String.to_atom(to_string(key)),
       value: parse_value(value)
     }

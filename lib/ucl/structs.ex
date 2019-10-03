@@ -1,11 +1,11 @@
-defmodule HCL.Section do
+defmodule UCL.Section do
   defstruct [:key, :block]
 end
 
-defmodule HCL.Block do
+defmodule UCL.Block do
   defstruct [:data]
 end
 
-defmodule HCL.Value do
+defmodule UCL.Value do
   defstruct [:key, :value]
 end

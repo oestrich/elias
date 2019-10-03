@@ -1,10 +1,10 @@
-defmodule HCL do
-  alias HCL.AST
-  alias HCL.Merge
-  alias HCL.Parser
+defmodule UCL do
+  alias UCL.AST
+  alias UCL.Merge
+  alias UCL.Parser
 
   @doc """
-  Parse an HCL string into a single map
+  Parse an UCL string into a single map
   """
   def parse(string) do
     case Parser.parse(string) do

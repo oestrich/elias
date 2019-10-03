@@ -1,10 +1,10 @@
-defmodule HCL.Merge do
+defmodule UCL.Merge do
   @moduledoc """
   Merge an AST into a map
   """
 
-  alias HCL.Section
-  alias HCL.Value
+  alias UCL.Section
+  alias UCL.Value
 
   @doc """
   Merge a set of sections into a single map

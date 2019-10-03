@@ -1,4 +1,4 @@
-defmodule HCL.Parser do
+defmodule UCL.Parser do
   @moduledoc """
   Parse a string into an AST for processing
   """
@@ -19,7 +19,7 @@ defmodule HCL.Parser do
   Step one of parsing a string
   """
   def lex_string(string) do
-    :hcl_lexer.string(String.to_charlist(string))
+    :ucl_lexer.string(String.to_charlist(string))
   end
 
   @doc """
@@ -28,7 +28,7 @@ defmodule HCL.Parser do
   Step two of parsing a string
   """
   def parse_tokens(tokens) do
-    case :hcl_parser.parse(tokens) do
+    case :ucl_parser.parse(tokens) do
       {:ok, ast} ->
         {:ok, ast}
     end

@@ -1,7 +1,7 @@
-defmodule HCL.ParserTest do
+defmodule UCL.ParserTest do
   use ExUnit.Case
 
-  alias HCL.Parser
+  alias UCL.Parser
 
   describe "the basics" do
     test "simple section" do
