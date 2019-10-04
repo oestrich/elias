@@ -272,4 +272,81 @@ defmodule UCL.ParserTest do
              ]
     end
   end
+
+  describe "comments" do
+    test "single line" do
+      string = """
+      # Comments
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {:comments, [' ', 'Comments']}
+             ]
+    end
+
+    test "multi-line" do
+      string = """
+      /* Comments
+        on multiple "lines"
+      *
+      # Tossing in extra \ / characters
+       */
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {:comments,
+                [
+                  ' ',
+                  'Comments',
+                  '\n',
+                  '  ',
+                  'on',
+                  ' ',
+                  'multiple',
+                  ' ',
+                  '"',
+                  'lines',
+                  '"',
+                  '\n',
+                  '*',
+                  '\n',
+                  '#',
+                  ' ',
+                  'Tossing',
+                  ' ',
+                  'in',
+                  ' ',
+                  'extra',
+                  '  ',
+                  '/',
+                  ' ',
+                  'characters',
+                  '\n',
+                  ' '
+                ]}
+             ]
+    end
+
+    test "can use parts of the comment inside strings" do
+      string = """
+      name = "Forward /"
+      name = "Star *"
+      name = "Both /*"
+      name = "Pound #"
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {:assignment, 'name', {:string, ['Forward', ' ', '/']}},
+               {:assignment, 'name', {:string, ['Star', ' ', '*']}},
+               {:assignment, 'name', {:string, ['Both', ' ', '/*']}},
+               {:assignment, 'name', {:string, ['Pound', ' ', '#']}}
+             ]
+    end
+  end
 end

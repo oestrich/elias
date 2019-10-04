@@ -3,6 +3,7 @@ defmodule UCL.Merge do
   Merge an AST into a map
   """
 
+  alias UCL.Comments
   alias UCL.Section
   alias UCL.Value
 
@@ -33,9 +34,13 @@ defmodule UCL.Merge do
     merge_section(section.key, section.block, map)
   end
 
+  def reduce_assignment(_comments = %Comments{}, map), do: map
+
   def reduce_value(section = %Section{}, map) do
     merge_section(section.key, section.block, map)
   end
+
+  def reduce_value(_comments = %Comments{}, map), do: map
 
   def reduce_value(%{key: key, value: values}, map) when is_list(values) do
     append_value(map, key, reduce_array(values))

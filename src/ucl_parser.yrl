@@ -8,8 +8,10 @@ assignments
 block
 block_end
 block_start
+comments
 equality
 keys
+multi_comments
 quotes
 root
 section
@@ -29,11 +31,16 @@ comma
 digit
 double_quote
 equals
+forward_slash
 newline
+pound
 semi_colon
 single_quote
 space
+star
 word
+comment_open
+comment_close
 .
 
 Rootsymbol root.
@@ -54,6 +61,7 @@ array_inner -> block : ['$1'].
 
 array_start -> array_open : '['.
 
+assignments -> comments assignments : ['$1' | '$2'].
 assignments -> assignment assignments : ['$1' | '$2'].
 assignments -> assignment semi_colon assignments : ['$1' | '$3'].
 assignments -> section assignments : ['$1' | '$2'].
@@ -74,6 +82,22 @@ block_end -> bracket_close : '}'.
 
 block_start -> bracket_open newline : '{'.
 block_start -> bracket_open : '{'.
+
+comments -> comment_open multi_comments comment_close : {comments, '$2'}.
+comments -> pound words newline : {comments, '$2'}.
+
+multi_comments -> back_slash multi_comments : [val('$1') | '$2'].
+multi_comments -> bracket_close multi_comments : [val('$1') | '$2'].
+multi_comments -> bracket_open multi_comments : [val('$1') | '$2'].
+multi_comments -> forward_slash multi_comments : [val('$1') | '$2'].
+multi_comments -> newline multi_comments : [val('$1') | '$2'].
+multi_comments -> pound multi_comments : [val('$1') | '$2'].
+multi_comments -> double_quote multi_comments : [val('$1') | '$2'].
+multi_comments -> single_quote multi_comments : [val('$1') | '$2'].
+multi_comments -> space multi_comments : [val('$1') | '$2'].
+multi_comments -> word multi_comments : [val('$1') | '$2'].
+multi_comments -> star multi_comments : [val('$1') | '$2'].
+multi_comments -> '$empty' : [].
 
 equality -> space equals space : '='.
 equality -> equals space : '='.
@@ -103,6 +127,11 @@ words -> single_quote words : [val('$1') | '$2'].
 words -> bracket_close words : [val('$1') | '$2'].
 words -> bracket_open words : [val('$1') | '$2'].
 words -> space words : [val('$1') | '$2'].
+words -> star words : [val('$1') | '$2'].
+words -> pound words : [val('$1') | '$2'].
+words -> forward_slash words : [val('$1') | '$2'].
+words -> comment_open words : [val('$1') | '$2'].
+words -> comment_close words : [val('$1') | '$2'].
 words -> '$empty' : [].
 
 Expect 3.

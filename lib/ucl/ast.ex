@@ -32,6 +32,12 @@ defmodule UCL.AST do
     }
   end
 
+  def parse_node({:comments, comments}) do
+    %UCL.Comments{
+      text: comments
+    }
+  end
+
   def parse_value({:array, expressions}), do: walk_ast(expressions)
 
   def parse_value({:block, expressions}), do: parse_node({:block, expressions})

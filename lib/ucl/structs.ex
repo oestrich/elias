@@ -9,3 +9,7 @@ end
 defmodule UCL.Value do
   defstruct [:key, :value]
 end
+
+defmodule UCL.Comments do
+  defstruct [:text]
+end
