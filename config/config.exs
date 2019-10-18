@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure your application as:
 #
-#     config :hcl, key: :value
+#     config :ucl, key: :value
 #
 # and access this configuration in your application as:
 #
-#     Application.get_env(:hcl, :key)
+#     Application.get_env(:ucl, :key)
 #
 # You can also configure a third-party app:
 #
