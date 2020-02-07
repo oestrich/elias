@@ -17,6 +17,7 @@ root
 section
 section_name
 string
+value
 words
 .
 
@@ -73,6 +74,7 @@ assignment -> word equality array : {assignment, val('$1'), '$3'}.
 assignment -> word equality block : {section, [{string, val('$1')}], '$3'}.
 assignment -> word equality digit : {assignment, val('$1'), integer('$3')}.
 assignment -> word equality string : {assignment, val('$1'), '$3'}.
+assignment -> word equality value : {assignment, val('$1'), '$3'}.
 
 block -> block_start block_end : {block, []}.
 block -> block_start assignments block_end : {block, '$2'}.
@@ -120,6 +122,8 @@ section -> section_name keys space block : {section, ['$1' | '$2'], '$4'}.
 section_name -> word space : {string, [val('$1')]}.
 
 string -> double_quote words double_quote : {string, '$2'}.
+
+value -> word : {string, '$1'}.
 
 words -> word words : [val('$1') | '$2'].
 words -> back_slash quotes words : [val('$1'), '$2' | '$3'].

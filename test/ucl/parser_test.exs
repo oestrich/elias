@@ -349,4 +349,22 @@ defmodule UCL.ParserTest do
              ]
     end
   end
+
+  describe "variables" do
+    test "does not require quotes around strings" do
+      string = """
+      room_exits "town_square" {
+        room_id = rooms.town_square.id
+      }
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {:section, [string: ['room_exits'], string: ['town_square']],
+                {:block,
+                 [{:assignment, 'room_id', {:string, {:word, 2, 'rooms.town_square.id'}}}]}}
+             ]
+    end
+  end
 end
