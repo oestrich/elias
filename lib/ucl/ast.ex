@@ -51,6 +51,12 @@ defmodule UCL.AST do
     |> unescape_quotes()
   end
 
+  def parse_value({:value, word}) do
+    word
+    |> to_string()
+    |> unescape_quotes()
+  end
+
   def unescape_quotes(string) do
     string
     |> String.replace("\\\"", "\"")

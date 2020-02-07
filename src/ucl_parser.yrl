@@ -123,7 +123,7 @@ section_name -> word space : {string, [val('$1')]}.
 
 string -> double_quote words double_quote : {string, '$2'}.
 
-value -> word : {string, '$1'}.
+value -> word : {value, val('$1')}.
 
 words -> word words : [val('$1') | '$2'].
 words -> back_slash quotes words : [val('$1'), '$2' | '$3'].
