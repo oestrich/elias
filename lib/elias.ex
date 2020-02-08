@@ -1,10 +1,10 @@
-defmodule UCL do
-  alias UCL.AST
-  alias UCL.Merge
-  alias UCL.Parser
+defmodule Elias do
+  alias Elias.AST
+  alias Elias.Merge
+  alias Elias.Parser
 
   @doc """
-  Parse an UCL string into a single map
+  Parse an Elias string into a single map
   """
   def parse(string) do
     case Parser.parse(string) do

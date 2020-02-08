@@ -1,4 +1,4 @@
-defmodule UCL.AST do
+defmodule Elias.AST do
   @moduledoc """
   Process a raw AST into nodes
   """
@@ -15,7 +15,7 @@ defmodule UCL.AST do
   end
 
   def parse_node({:section, key, section}) do
-    %UCL.Section{
+    %Elias.Section{
       key: walk_key(key),
       block: parse_node(section)
     }
@@ -26,14 +26,14 @@ defmodule UCL.AST do
   end
 
   def parse_node({:assignment, key, value}) do
-    %UCL.Value{
+    %Elias.Value{
       key: String.to_atom(to_string(key)),
       value: parse_value(value)
     }
   end
 
   def parse_node({:comments, comments}) do
-    %UCL.Comments{
+    %Elias.Comments{
       text: comments
     }
   end
@@ -52,9 +52,7 @@ defmodule UCL.AST do
   end
 
   def parse_value({:value, word}) do
-    word
-    |> to_string()
-    |> unescape_quotes()
+    to_string(word)
   end
 
   def unescape_quotes(string) do

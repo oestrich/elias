@@ -1,11 +1,11 @@
-defmodule UCL.Merge do
+defmodule Elias.Merge do
   @moduledoc """
   Merge an AST into a map
   """
 
-  alias UCL.Comments
-  alias UCL.Section
-  alias UCL.Value
+  alias Elias.Comments
+  alias Elias.Section
+  alias Elias.Value
 
   @doc """
   Merge a set of sections into a single map

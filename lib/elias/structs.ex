@@ -1,15 +1,15 @@
-defmodule UCL.Section do
+defmodule Elias.Section do
   defstruct [:key, :block]
 end
 
-defmodule UCL.Block do
+defmodule Elias.Block do
   defstruct [:data]
 end
 
-defmodule UCL.Value do
+defmodule Elias.Value do
   defstruct [:key, :value]
 end
 
-defmodule UCL.Comments do
+defmodule Elias.Comments do
   defstruct [:text]
 end

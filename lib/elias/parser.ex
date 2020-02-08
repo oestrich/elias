@@ -1,4 +1,4 @@
-defmodule UCL.Parser do
+defmodule Elias.Parser do
   @moduledoc """
   Parse a string into an AST for processing
   """
@@ -19,7 +19,7 @@ defmodule UCL.Parser do
   Step one of parsing a string
   """
   def lex_string(string) do
-    :ucl_lexer.string(String.to_charlist(string))
+    :elias_lexer.string(String.to_charlist(string))
   end
 
   @doc """
@@ -28,7 +28,7 @@ defmodule UCL.Parser do
   Step two of parsing a string
   """
   def parse_tokens(tokens) do
-    case :ucl_parser.parse(tokens) do
+    case :elias_parser.parse(tokens) do
       {:ok, ast} ->
         {:ok, ast}
     end

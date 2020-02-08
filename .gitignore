@@ -20,7 +20,7 @@ erl_crash.dump
 *.ez
 
 # Ignore package tarball (built via "mix hex.build").
-ucl-*.tar
+elias-*.tar
 
-src/ucl_lexer.erl
-src/ucl_parser.erl
+src/elias_lexer.erl
+src/elias_parser.erl

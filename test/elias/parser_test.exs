@@ -1,7 +1,7 @@
-defmodule UCL.ParserTest do
+defmodule Elias.ParserTest do
   use ExUnit.Case
 
-  alias UCL.Parser
+  alias Elias.Parser
 
   describe "the basics" do
     test "simple section" do
@@ -363,7 +363,7 @@ defmodule UCL.ParserTest do
       assert ast == [
                {:section, [string: ['room_exits'], string: ['town_square']],
                 {:block,
-                 [{:assignment, 'room_id', {:string, {:word, 2, 'rooms.town_square.id'}}}]}}
+                 [{:assignment, 'room_id', {:value, 'rooms.town_square.id'}}]}}
              ]
     end
   end
