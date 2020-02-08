@@ -29,6 +29,7 @@ defmodule Elias.MixProject do
   defp deps do
     [
       {:benchee, "~> 1.0", only: :dev},
+      {:credo, "~> 1.2", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end

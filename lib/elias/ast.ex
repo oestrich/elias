@@ -1,6 +1,6 @@
 defmodule Elias.AST do
   @moduledoc """
-  Process a raw AST into nodes
+  Process a raw AST into Elixir structs
   """
 
   @doc """
@@ -8,12 +8,16 @@ defmodule Elias.AST do
   """
   def walk(ast), do: walk_ast(ast)
 
+  @doc false
   def walk_ast([]), do: []
 
   def walk_ast([node | nodes]) do
     [parse_node(node) | walk_ast(nodes)]
   end
 
+  @doc """
+  Convert a single AST tuple into a struct
+  """
   def parse_node({:section, key, section}) do
     %Elias.Section{
       key: walk_key(key),
@@ -38,6 +42,9 @@ defmodule Elias.AST do
     }
   end
 
+  @doc """
+  Parse assignment values into a struct or plain value
+  """
   def parse_value({:array, expressions}), do: walk_ast(expressions)
 
   def parse_value({:block, expressions}), do: parse_node({:block, expressions})
@@ -55,12 +62,14 @@ defmodule Elias.AST do
     to_string(word)
   end
 
+  @doc false
   def unescape_quotes(string) do
     string
     |> String.replace("\\\"", "\"")
     |> String.replace("\\'", "'")
   end
 
+  @doc false
   def walk_key(strings) do
     Enum.map(strings, fn {:string, string} ->
       String.to_atom(to_string(string))

@@ -1,11 +1,18 @@
 defmodule Elias do
+  @moduledoc """
+  Elias is a UCL parser
+
+  [Universal Configuration Language](https://github.com/vstakhov/libucl)
+  """
+
   alias Elias.AST
   alias Elias.Merge
   alias Elias.Parser
 
   @doc """
-  Parse an Elias string into a single map
+  Parse an UCL string into a map
   """
+  @spec parse(String.t()) :: map()
   def parse(string) do
     case Parser.parse(string) do
       {:ok, ast} ->

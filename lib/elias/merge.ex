@@ -14,6 +14,7 @@ defmodule Elias.Merge do
     Enum.reduce(assigments, %{}, &reduce_assignment/2)
   end
 
+  @doc false
   def append_value(map, key, value) do
     case Map.has_key?(map, key) do
       true ->
@@ -26,6 +27,7 @@ defmodule Elias.Merge do
     end
   end
 
+  @doc false
   def reduce_assignment(value = %Value{}, map) do
     append_value(map, value.key, value.value)
   end
@@ -40,6 +42,7 @@ defmodule Elias.Merge do
     merge_section(section.key, section.block, map)
   end
 
+  @doc false
   def reduce_value(_comments = %Comments{}, map), do: map
 
   def reduce_value(%{key: key, value: values}, map) when is_list(values) do
@@ -50,6 +53,7 @@ defmodule Elias.Merge do
     append_value(map, key, value)
   end
 
+  @doc false
   def reduce_array(values) do
     Enum.map(values, fn block ->
       Enum.reduce(block, %{}, fn value, map ->
@@ -58,6 +62,7 @@ defmodule Elias.Merge do
     end)
   end
 
+  @doc false
   def merge_section([key], value, map) do
     data = Enum.reduce(value, %{}, &reduce_value/2)
     append_value(map, key, data)
