@@ -362,8 +362,7 @@ defmodule Elias.ParserTest do
 
       assert ast == [
                {:section, [string: ['room_exits'], string: ['town_square']],
-                {:block,
-                 [{:assignment, 'room_id', {:value, 'rooms.town_square.id'}}]}}
+                {:block, [{:assignment, 'room_id', {:value, 'rooms.town_square.id'}}]}}
              ]
     end
   end
