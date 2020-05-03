@@ -31,6 +31,7 @@ Rules.
 {BracketOpen} : {token, {bracket_open, TokenLine, TokenChars}}.
 {Comma} : {token, {comma, TokenLine, TokenChars}}.
 {Colon} : {token, {colon, TokenLine, TokenChars}}.
+{Dash} : {token, {dash, TokenChars, TokenChars}}.
 {Digit} : {token, {digit, TokenLine, TokenChars}}.
 {DoubleQuote} : {token, {double_quote, TokenLine, TokenChars}}.
 {Equals} : {token, {equals, TokenLine, TokenChars}}.

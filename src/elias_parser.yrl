@@ -29,6 +29,7 @@ bracket_close
 bracket_open
 colon
 comma
+dash
 digit
 double_quote
 equals
@@ -111,6 +112,7 @@ equality -> space colon : '='.
 equality -> colon : '='.
 
 keys -> string keys : ['$1' | '$2'].
+keys -> digit keys : ['$1' | '$2'].
 keys -> '$empty' : [].
 
 quotes -> double_quote : val('$1').
@@ -133,6 +135,7 @@ words -> bracket_open words : [val('$1') | '$2'].
 words -> space words : [val('$1') | '$2'].
 words -> star words : [val('$1') | '$2'].
 words -> pound words : [val('$1') | '$2'].
+words -> dash words : [val('$1') | '$2'].
 words -> forward_slash words : [val('$1') | '$2'].
 words -> comment_open words : [val('$1') | '$2'].
 words -> comment_close words : [val('$1') | '$2'].
