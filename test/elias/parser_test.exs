@@ -190,6 +190,24 @@ defmodule Elias.ParserTest do
                  ]}}
              ]
     end
+
+    test "escaped values" do
+      string = """
+      rooms "town_square" {
+        regex = "\\bHello\\b"
+      }
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {:section, [string: ['rooms'], string: ['town_square']],
+                {:block,
+                 [
+                   {:assignment, 'regex', {:string, ['\\', 'bHello', '\\', 'b']}}
+                 ]}}
+             ]
+    end
   end
 
   describe "integers" do
