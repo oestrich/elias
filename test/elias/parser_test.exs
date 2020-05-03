@@ -172,6 +172,24 @@ defmodule Elias.ParserTest do
                  ]}}
              ]
     end
+
+    test "keys can have integers" do
+      string = """
+      rooms "town_square0" {
+        name = "Town Square"
+      }
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {:section, [string: ['rooms'], string: ['town_square', '0']],
+                {:block,
+                 [
+                   {:assignment, 'name', {:string, ['Town', ' ', 'Square']}}
+                 ]}}
+             ]
+    end
   end
 
   describe "integers" do
