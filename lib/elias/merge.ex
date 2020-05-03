@@ -38,11 +38,11 @@ defmodule Elias.Merge do
 
   def reduce_assignment(_comments = %Comments{}, map), do: map
 
+  @doc false
   def reduce_value(section = %Section{}, map) do
     merge_section(section.key, section.block, map)
   end
 
-  @doc false
   def reduce_value(_comments = %Comments{}, map), do: map
 
   def reduce_value(%{key: key, value: values}, map) when is_list(values) do
@@ -57,7 +57,7 @@ defmodule Elias.Merge do
   def reduce_array(values) do
     Enum.map(values, fn block ->
       Enum.reduce(block, %{}, fn value, map ->
-        append_value(map, value.key, value.value)
+        reduce_value(value, map)
       end)
     end)
   end
