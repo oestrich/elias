@@ -138,6 +138,7 @@ words -> star words : [val('$1') | '$2'].
 words -> pound words : [val('$1') | '$2'].
 words -> dash words : [val('$1') | '$2'].
 words -> digit words : [val('$1') | '$2'].
+words -> colon words : [val('$1') | '$2'].
 words -> forward_slash words : [val('$1') | '$2'].
 words -> comment_open words : [val('$1') | '$2'].
 words -> comment_close words : [val('$1') | '$2'].
