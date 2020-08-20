@@ -278,6 +278,31 @@ defmodule Elias.ParserTest do
              ]
     end
 
+    test "array with no elements" do
+      string = """
+      rooms "town_square" {
+        features = [
+        ]
+
+        characters = []
+      }
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {
+                 :section,
+                 [string: ['rooms'], string: ['town_square']],
+                 {:block,
+                  [
+                    {:assignment, 'features', {:array, []}},
+                    {:assignment, 'characters', {:array, []}}
+                  ]}
+               }
+             ]
+    end
+
     test "multiple elements" do
       string = """
       rooms "town_square" {

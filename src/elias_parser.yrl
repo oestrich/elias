@@ -18,6 +18,7 @@ section
 section_name
 string
 value
+whitespace
 words
 .
 
@@ -50,10 +51,14 @@ Rootsymbol root.
 root -> block_start assignments block_end : '$2'.
 root -> assignments : '$1'.
 
-array -> array_start array_end : {array, []}.
-array -> array_start array_inner array_end : {array, '$2'}.
+whitespace -> newline whitespace : ['$1' | '$2'].
+whitespace -> space whitespace : ['$1' | '$2'].
+whitespace -> '$empty' : [].
 
-array_end -> space array_close : ']'.
+array -> array_start array_end : {array, []}.
+array -> array_start whitespace array_end : {array, []}.
+array -> array_start array_inner whitespace array_end : {array, '$2'}.
+
 array_end -> array_close : ']'.
 
 array_inner -> block comma array_inner : ['$1' | '$3'].
@@ -145,7 +150,7 @@ words -> comment_open words : [val('$1') | '$2'].
 words -> comment_close words : [val('$1') | '$2'].
 words -> '$empty' : [].
 
-Expect 3.
+Expect 4.
 
 Erlang code.
 
