@@ -384,6 +384,39 @@ defmodule Elias.ParserTest do
                {:assignment, 'name', {:string, ['Pound', ' ', '#']}}
              ]
     end
+
+    test "comments in arrays" do
+      string = """
+      rooms "town_square" {
+        features = [
+          # A sign
+          { name = "sign" },
+          # Another one
+          { name = "sign" }
+        ]
+      }
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {
+                 :section,
+                 [{:string, ['rooms']}, {:string, ['town_square']}],
+                 {:block,
+                  [
+                    {:assignment, 'features',
+                     {:array,
+                      [
+                        comments: [' ', 'A', ' ', 'sign'],
+                        block: [{:assignment, 'name', {:string, ['sign']}}],
+                        comments: [' ', 'Another', ' ', 'one'],
+                        block: [{:assignment, 'name', {:string, ['sign']}}]
+                      ]}}
+                  ]}
+               }
+             ]
+    end
   end
 
   describe "variables" do

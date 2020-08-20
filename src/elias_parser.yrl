@@ -59,6 +59,7 @@ array_end -> array_close : ']'.
 array_inner -> block comma array_inner : ['$1' | '$3'].
 array_inner -> space array_inner : '$2'.
 array_inner -> newline array_inner : '$2'.
+array_inner -> comments array_inner : ['$1' | '$2'].
 array_inner -> block : ['$1'].
 
 array_start -> array_open : '['.
