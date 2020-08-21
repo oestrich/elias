@@ -3,6 +3,7 @@ array
 array_end
 array_inner
 array_start
+array_value
 assignment
 assignments
 block
@@ -16,7 +17,9 @@ quotes
 root
 section
 section_name
+single_comments
 string
+symbol
 value
 whitespace
 words
@@ -30,6 +33,8 @@ bracket_close
 bracket_open
 colon
 comma
+comment_close
+comment_open
 dash
 digit
 double_quote
@@ -42,38 +47,58 @@ single_quote
 space
 star
 word
-comment_open
-comment_close
 .
 
 Rootsymbol root.
 
+symbol -> array_close : val('$1').
+symbol -> array_open : val('$1').
+symbol -> back_slash : val('$1').
+symbol -> bracket_close : val('$1').
+symbol -> bracket_open : val('$1').
+symbol -> colon : val('$1').
+symbol -> comma : val('$1').
+symbol -> dash : val('$1').
+symbol -> digit : val('$1').
+symbol -> double_quote : val('$1').
+symbol -> equals : val('$1').
+symbol -> forward_slash : val('$1').
+symbol -> pound : val('$1').
+symbol -> semi_colon : val('$1').
+symbol -> single_quote : val('$1').
+symbol -> space : val('$1').
+symbol -> star : val('$1').
+symbol -> word : val('$1').
+
 root -> block_start assignments block_end : '$2'.
 root -> assignments : '$1'.
 
-whitespace -> newline whitespace : ['$1' | '$2'].
-whitespace -> space whitespace : ['$1' | '$2'].
-whitespace -> '$empty' : [].
+whitespace -> newline whitespace : [val('$1') | '$2'].
+whitespace -> space whitespace : [val('$1') | '$2'].
+whitespace -> comments whitespace : ['$1' | '$2'].
+whitespace -> newline : [val('$1')].
+whitespace -> space : [val('$1')].
+whitespace -> comments : ['$1'].
 
 array -> array_start array_end : {array, []}.
 array -> array_start whitespace array_end : {array, []}.
+array -> array_start array_inner array_end : {array, '$2'}.
 array -> array_start array_inner whitespace array_end : {array, '$2'}.
 
 array_end -> array_close : ']'.
 
-array_inner -> block comma array_inner : ['$1' | '$3'].
-array_inner -> string comma array_inner : ['$1' | '$3'].
-array_inner -> value comma array_inner : ['$1' | '$3'].
-array_inner -> digit comma array_inner : [integer('$1') | '$3'].
+array_inner -> array_value comma array_inner : ['$1' | '$3'].
 array_inner -> space array_inner : '$2'.
 array_inner -> newline array_inner : '$2'.
 array_inner -> comments array_inner : ['$1' | '$2'].
-array_inner -> block : ['$1'].
-array_inner -> string : ['$1'].
-array_inner -> value : ['$1'].
-array_inner -> digit : [integer('$1')].
+array_inner -> array_value : ['$1'].
 
 array_start -> array_open : '['.
+
+array_value -> block : '$1'.
+array_value -> string : '$1'.
+array_value -> value : '$1'.
+array_value -> digit : integer('$1').
 
 assignments -> comments assignments : ['$1' | '$2'].
 assignments -> assignment assignments : ['$1' | '$2'].
@@ -99,20 +124,19 @@ block_start -> bracket_open newline : '{'.
 block_start -> bracket_open : '{'.
 
 comments -> comment_open multi_comments comment_close : {comments, '$2'}.
-comments -> pound words newline : {comments, '$2'}.
+comments -> pound single_comments newline : {comments, '$2'}.
 
-multi_comments -> back_slash multi_comments : [val('$1') | '$2'].
-multi_comments -> bracket_close multi_comments : [val('$1') | '$2'].
-multi_comments -> bracket_open multi_comments : [val('$1') | '$2'].
-multi_comments -> forward_slash multi_comments : [val('$1') | '$2'].
+single_comments -> symbol single_comments : ['$1' | '$2'].
+single_comments -> comment_close single_comments : [val('$1') | '$2'].
+single_comments -> comment_open single_comments : [val('$1') | '$2'].
+single_comments -> symbol : ['$1'].
+single_comments -> comment_close : [val('$1')].
+single_comments -> comment_open : [val('$1')].
+
+multi_comments -> symbol multi_comments : ['$1' | '$2'].
 multi_comments -> newline multi_comments : [val('$1') | '$2'].
-multi_comments -> pound multi_comments : [val('$1') | '$2'].
-multi_comments -> double_quote multi_comments : [val('$1') | '$2'].
-multi_comments -> single_quote multi_comments : [val('$1') | '$2'].
-multi_comments -> space multi_comments : [val('$1') | '$2'].
-multi_comments -> word multi_comments : [val('$1') | '$2'].
-multi_comments -> star multi_comments : [val('$1') | '$2'].
-multi_comments -> '$empty' : [].
+multi_comments -> symbol : ['$1'].
+multi_comments -> newline : [val('$1')].
 
 equality -> space equals space : '='.
 equality -> equals space : '='.
@@ -156,7 +180,7 @@ words -> comment_open words : [val('$1') | '$2'].
 words -> comment_close words : [val('$1') | '$2'].
 words -> '$empty' : [].
 
-Expect 4.
+Expect 3.
 
 Erlang code.
 

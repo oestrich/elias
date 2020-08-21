@@ -418,6 +418,11 @@ defmodule Elias.ParserTest do
           { name = "sign" },
           # Another one
           { name = "sign" }
+          # Comment at the end
+        ]
+
+        other = [
+          # comments
         ]
       }
       """
@@ -437,7 +442,8 @@ defmodule Elias.ParserTest do
                         block: [{:assignment, 'name', {:string, ['sign']}}],
                         comments: [' ', 'Another', ' ', 'one'],
                         block: [{:assignment, 'name', {:string, ['sign']}}]
-                      ]}}
+                      ]}},
+                    {:assignment, 'other', {:array, []}}
                   ]}
                }
              ]
@@ -454,13 +460,13 @@ defmodule Elias.ParserTest do
       {:ok, ast} = Parser.parse(string)
 
       assert ast == [
-                    {:assignment, 'array',
-                     {:array,
-                      [
-                        {:string, ['sign']},
-                        {:integer, 5},
-                        {:value, 'true'},
-                      ]}}
+               {:assignment, 'array',
+                {:array,
+                 [
+                   {:string, ['sign']},
+                   {:integer, 5},
+                   {:value, 'true'}
+                 ]}}
              ]
     end
   end
