@@ -62,10 +62,16 @@ array -> array_start array_inner whitespace array_end : {array, '$2'}.
 array_end -> array_close : ']'.
 
 array_inner -> block comma array_inner : ['$1' | '$3'].
+array_inner -> string comma array_inner : ['$1' | '$3'].
+array_inner -> value comma array_inner : ['$1' | '$3'].
+array_inner -> digit comma array_inner : [integer('$1') | '$3'].
 array_inner -> space array_inner : '$2'.
 array_inner -> newline array_inner : '$2'.
 array_inner -> comments array_inner : ['$1' | '$2'].
 array_inner -> block : ['$1'].
+array_inner -> string : ['$1'].
+array_inner -> value : ['$1'].
+array_inner -> digit : [integer('$1')].
 
 array_start -> array_open : '['.
 

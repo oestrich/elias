@@ -442,6 +442,27 @@ defmodule Elias.ParserTest do
                }
              ]
     end
+
+    test "non objects in arrays" do
+      string = """
+      array = [
+        "sign",5,
+        true
+      ]
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+                    {:assignment, 'array',
+                     {:array,
+                      [
+                        {:string, ['sign']},
+                        {:integer, 5},
+                        {:value, 'true'},
+                      ]}}
+             ]
+    end
   end
 
   describe "variables" do

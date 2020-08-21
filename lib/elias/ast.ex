@@ -42,6 +42,18 @@ defmodule Elias.AST do
     }
   end
 
+  def parse_node({:string, strings}) do
+    parse_value({:string, strings})
+  end
+
+  def parse_node({:integer, integer}) do
+    parse_value({:integer, integer})
+  end
+
+  def parse_node({:value, value}) do
+    parse_value({:value, value})
+  end
+
   @doc """
   Parse assignment values into a struct or plain value
   """
