@@ -8,9 +8,14 @@ defmodule Elias.Block do
   defstruct [:data]
 end
 
-defmodule Elias.Value do
+defmodule Elias.Variable do
   @moduledoc false
   defstruct [:key, :value]
+end
+
+defmodule Elias.Value do
+  @moduledoc false
+  defstruct [:data]
 end
 
 defmodule Elias.Comments do

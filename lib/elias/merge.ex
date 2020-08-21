@@ -5,7 +5,7 @@ defmodule Elias.Merge do
 
   alias Elias.Comments
   alias Elias.Section
-  alias Elias.Value
+  alias Elias.Variable
 
   @doc """
   Merge a set of sections into a single map
@@ -28,7 +28,7 @@ defmodule Elias.Merge do
   end
 
   @doc false
-  def reduce_assignment(value = %Value{}, map) do
+  def reduce_assignment(value = %Variable{}, map) do
     append_value(map, value.key, value.value)
   end
 
@@ -55,10 +55,19 @@ defmodule Elias.Merge do
 
   @doc false
   def reduce_array(values) do
-    Enum.map(values, fn block ->
-      Enum.reduce(block, %{}, fn value, map ->
-        reduce_value(value, map)
-      end)
+    values
+    |> Enum.map(&map_array_item/1)
+    |> Enum.reject(&is_nil/1)
+  end
+
+  @doc false
+  def map_array_item(value = %Elias.Value{}), do: value.data
+
+  def map_array_item(%Elias.Comments{}), do: nil
+
+  def map_array_item(block) do
+    Enum.reduce(block, %{}, fn value, map ->
+      reduce_value(value, map)
     end)
   end
 

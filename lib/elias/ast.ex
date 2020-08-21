@@ -30,7 +30,7 @@ defmodule Elias.AST do
   end
 
   def parse_node({:assignment, key, value}) do
-    %Elias.Value{
+    %Elias.Variable{
       key: String.to_atom(to_string(key)),
       value: parse_value(value)
     }
@@ -43,15 +43,21 @@ defmodule Elias.AST do
   end
 
   def parse_node({:string, strings}) do
-    parse_value({:string, strings})
+    %Elias.Value{
+      data: parse_value({:string, strings})
+    }
   end
 
   def parse_node({:integer, integer}) do
-    parse_value({:integer, integer})
+    %Elias.Value{
+      data: parse_value({:integer, integer})
+    }
   end
 
   def parse_node({:value, value}) do
-    parse_value({:value, value})
+    %Elias.Value{
+      data: parse_value({:value, value})
+    }
   end
 
   @doc """
