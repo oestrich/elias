@@ -29,7 +29,13 @@ defmodule Elias.Merge do
 
   @doc false
   def reduce_assignment(value = %Variable{}, map) do
-    append_value(map, value.key, value.value)
+    case is_list(value.value) do
+      true ->
+        append_value(map, value.key, reduce_array(value.value))
+
+      false ->
+        append_value(map, value.key, value.value)
+    end
   end
 
   def reduce_assignment(section = %Section{}, map) do
