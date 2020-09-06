@@ -166,6 +166,7 @@ value -> value_sub : {value, join('$1')}.
 
 value_sub -> word value_sub : [val('$1') | '$2'].
 value_sub -> dash value_sub : [val('$1') | '$2'].
+value_sub -> digit value_sub : [val('$1') | '$2'].
 value_sub -> word : [val('$1')].
 
 words -> word words : [val('$1') | '$2'].
@@ -185,7 +186,7 @@ words -> comment_open words : [val('$1') | '$2'].
 words -> comment_close words : [val('$1') | '$2'].
 words -> '$empty' : [].
 
-Expect 4.
+Expect 5.
 
 Erlang code.
 
