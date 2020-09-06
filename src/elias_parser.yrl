@@ -21,6 +21,7 @@ single_comments
 string
 symbol
 value
+value_sub
 whitespace
 words
 .
@@ -161,7 +162,11 @@ section_name -> word space : {string, [val('$1')]}.
 
 string -> double_quote words double_quote : {string, '$2'}.
 
-value -> word : {value, val('$1')}.
+value -> value_sub : {value, join('$1')}.
+
+value_sub -> word value_sub : [val('$1') | '$2'].
+value_sub -> dash value_sub : [val('$1') | '$2'].
+value_sub -> word : [val('$1')].
 
 words -> word words : [val('$1') | '$2'].
 words -> back_slash quotes words : [val('$1'), '$2' | '$3'].
@@ -180,7 +185,7 @@ words -> comment_open words : [val('$1') | '$2'].
 words -> comment_close words : [val('$1') | '$2'].
 words -> '$empty' : [].
 
-Expect 3.
+Expect 4.
 
 Erlang code.
 
@@ -190,3 +195,9 @@ integer(V) ->
 
 val({_, _, V}) ->
   V.
+
+join([]) ->
+  [];
+
+join([Str | Strs]) ->
+  Str ++ join(Strs).

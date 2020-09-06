@@ -208,6 +208,24 @@ defmodule Elias.ParserTest do
                  ]}}
              ]
     end
+
+    test "plain values can have dashes" do
+      string = """
+      room_exits "town_square" {
+        south = other-zone.rooms.entrance.id
+      }
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {
+                 :section,
+                 [string: ['room_exits'], string: ['town_square']],
+                 {:block, [{:assignment, 'south', {:value, 'other-zone.rooms.entrance.id'}}]}
+               }
+             ]
+    end
   end
 
   describe "integers" do
