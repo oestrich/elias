@@ -232,6 +232,59 @@ defmodule Elias.ParserTest do
                }
              ]
     end
+
+    test "string values with escaped quotes" do
+      string = """
+      data = {
+        channel_name = "characters:${character.id}"
+        text = "Hello, we have a {color foreground='white'}bandit{/color} problem."
+      }
+      """
+
+      {:ok, ast} = Parser.parse(string)
+
+      assert ast == [
+               {
+                 :section,
+                 [{:string, 'data'}],
+                 {
+                   :block,
+                   [
+                     {:assignment, 'channel_name',
+                      {:string, ['characters', ':', '$', '{', 'character.id', '}']}},
+                     {:assignment, 'text',
+                      {:string,
+                       [
+                         'Hello,',
+                         ' ',
+                         'we',
+                         ' ',
+                         'have',
+                         ' ',
+                         'a',
+                         ' ',
+                         '{',
+                         'color',
+                         ' ',
+                         'foreground',
+                         '=',
+                         '\'',
+                         'white',
+                         '\'',
+                         '}',
+                         'bandit',
+                         '{',
+                         '/',
+                         'color',
+                         '}',
+                         ' ',
+                         'problem.'
+                       ]}}
+                   ]
+                 }
+               }
+             ]
+    end
   end
 
   describe "integers" do

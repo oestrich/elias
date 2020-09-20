@@ -172,6 +172,7 @@ value_sub -> word : [val('$1')].
 words -> word words : [val('$1') | '$2'].
 words -> back_slash quotes words : [val('$1'), '$2' | '$3'].
 words -> back_slash word words : [val('$1'), val('$2') | '$3'].
+words -> equals words : [val('$1') | '$2'].
 words -> single_quote words : [val('$1') | '$2'].
 words -> bracket_close words : [val('$1') | '$2'].
 words -> bracket_open words : [val('$1') | '$2'].
