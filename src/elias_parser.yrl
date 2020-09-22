@@ -112,6 +112,7 @@ assignments -> '$empty' : [].
 assignment -> word equality array : {assignment, val('$1'), '$3'}.
 assignment -> word equality block : {section, [{string, val('$1')}], '$3'}.
 assignment -> word equality digit : {assignment, val('$1'), integer('$3')}.
+assignment -> word equality dash digit : {assignment, val('$1'), negative_integer('$4')}.
 assignment -> word equality string : {assignment, val('$1'), '$3'}.
 assignment -> word equality value : {assignment, val('$1'), '$3'}.
 
@@ -187,13 +188,17 @@ words -> comment_open words : [val('$1') | '$2'].
 words -> comment_close words : [val('$1') | '$2'].
 words -> '$empty' : [].
 
-Expect 5.
+Expect 6.
 
 Erlang code.
 
 integer(V) ->
   Digits = val(V),
   {integer, erlang:list_to_integer(Digits)}.
+
+negative_integer(V) ->
+  Digits = val(V),
+  {integer, erlang:list_to_integer(Digits) * -1}.
 
 val({_, _, V}) ->
   V.
